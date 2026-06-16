@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>My Barter Requests</h2>
+
+{% for request in requests %}
+
+<div class="card mb-3">
+
+    <div class="card-body">
+
+        <p>
+            <strong>Requester:</strong>
+            {{ request.requester_name }}
+        </p>
+
+        <p>
+            <strong>Offered Item:</strong>
+            {{ request.offered_item }}
+        </p>
+
+        <p>
+            <strong>Status:</strong>
+            {{ request.status }}
+        </p>
+
+        {% if request.status == "Pending" %}
+
+        <a href="/accept-barter/{{ request.id }}"
+           class="btn btn-success">
+           Accept
+        </a>
+
+        <a href="/reject-barter/{{ request.id }}"
+           class="btn btn-danger">
+           Reject
+        </a>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endfor %}
+
+{% endblock %}

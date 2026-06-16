@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Admin Dashboard</h2>
+
+<div class="row">
+
+```
+<div class="col-md-4">
+    <div class="card p-3">
+        <h4>Total Users</h4>
+        <h2>{{ users|length }}</h2>
+    </div>
+</div>
+
+<div class="col-md-4">
+    <div class="card p-3">
+        <h4>Total Items</h4>
+        <h2>{{ items|length }}</h2>
+    </div>
+</div>
+
+<div class="col-md-4">
+    <div class="card p-3">
+        <h4>Total Bids</h4>
+        <h2>{{ bids|length }}</h2>
+    </div>
+</div>
+```
+
+</div>
+
+<hr>
+
+<h3>All Items</h3>
+
+<table class="table table-bordered">
+
+```
+<tr>
+    <th>ID</th>
+    <th>Title</th>
+    <th>Category</th>
+    <th>Price</th>
+    <th>Action</th>
+</tr>
+
+{% for item in items %}
+
+<tr>
+    <td>{{ item.id }}</td>
+    <td>{{ item.title }}</td>
+    <td>{{ item.category }}</td>
+    <td>₹{{ item.price }}</td>
+    <td>
+        <a href="/admin-delete-item/{{ item.id }}"
+           class="btn btn-danger btn-sm">
+            Delete Item
+        </a>
+    </td>
+</tr>
+
+{% endfor %}
+```
+
+</table>
+
+<hr>
+
+<h3>All Users</h3>
+
+<table class="table table-bordered">
+
+```
+<tr>
+    <th>ID</th>
+    <th>Name</th>
+    <th>Email</th>
+    <th>Action</th>
+</tr>
+
+{% for user in users %}
+
+<tr>
+    <td>{{ user.id }}</td>
+    <td>{{ user.name }}</td>
+    <td>{{ user.email }}</td>
+    <td>
+        <a href="/admin-delete-user/{{ user.id }}"
+           class="btn btn-danger btn-sm">
+            Delete User
+        </a>
+    </td>
+</tr>
+
+{% endfor %}
+```
+
+</table>
+
+{% endblock %}

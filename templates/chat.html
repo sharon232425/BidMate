@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container">
+
+    <h2>💬 💬 Comments & Questions About: {{ item.title }}</h2>
+
+    <hr>
+
+    <div class="card mb-3">
+
+        <div class="card-body"
+             style="height:300px; overflow-y:scroll;">
+
+            {% for msg in messages %}
+
+            <div class="alert alert-light">
+
+                {% if msg.sender_id == session['user_id'] %}
+                    <strong>You</strong><br>
+                {% else %}
+                    <strong>Seller</strong><br>
+                {% endif %}
+
+                {{ msg.message }}
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+    <form method="POST">
+
+        <div class="mb-3">
+
+            <input type="text"
+                   name="message"
+                   class="form-control"
+                   placeholder="Type your message..."
+                   required>
+
+        </div>
+
+        <button type="submit"
+                class="btn btn-primary">
+
+            Send
+
+        </button>
+
+        <a href="/item/{{ item.id }}"
+           class="btn btn-secondary">
+
+            Back
+
+        </a>
+
+    </form>
+
+</div>
+
+{% endblock %}

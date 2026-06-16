@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Edit Item</h2>
+
+<form method="POST" enctype="multipart/form-data">
+
+```
+<div class="mb-3">
+    <label>Item Name</label>
+    <input type="text"
+           name="title"
+           class="form-control"
+           value="{{ item.title }}"
+           required>
+</div>
+
+<div class="mb-3">
+    <label>Description</label>
+    <textarea name="description"
+              class="form-control"
+              required>{{ item.description }}</textarea>
+</div>
+
+<div class="mb-3">
+    <label>Price</label>
+    <input type="number"
+           name="price"
+           class="form-control"
+           value="{{ item.price }}"
+           required>
+</div>
+
+<div class="mb-3">
+    <label>Category</label>
+    <input type="text"
+           name="category"
+           class="form-control"
+           value="{{ item.category }}"
+           required>
+</div>
+
+<div class="mb-3">
+    <label>New Image (Optional)</label>
+    <input type="file"
+           name="image"
+           class="form-control">
+</div>
+
+<button type="submit"
+        class="btn btn-success">
+    Update Item
+</button>
+```
+
+</form>
+
+{% endblock %}

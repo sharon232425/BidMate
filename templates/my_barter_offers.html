@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>My Barter Offers</h2>
+
+{% for offer in offers %}
+
+<div class="card mb-3">
+
+    <div class="card-body">
+
+        <p>
+            <strong>Offered Item:</strong>
+            {{ offer.offered_item }}
+        </p>
+
+        <p>
+            <strong>Status:</strong>
+
+            {% if offer.status == "Accepted" %}
+                <span class="text-success">
+                    Accepted
+                </span>
+
+            {% elif offer.status == "Rejected" %}
+                <span class="text-danger">
+                    Rejected
+                </span>
+
+            {% else %}
+                <span class="text-warning">
+                    Pending
+                </span>
+
+            {% endif %}
+        </p>
+
+    </div>
+
+</div>
+
+{% endfor %}
+
+{% endblock %}

@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container">
+
+    <div class="card mt-4">
+
+        <div class="card-body">
+
+            <h2>🔄 Barter Request</h2>
+
+            <hr>
+
+            <h4>{{ item.title }}</h4>
+
+            <p>{{ item.description }}</p>
+
+            <p>
+                <strong>Category:</strong>
+                {{ item.category }}
+            </p>
+
+            <form method="POST">
+
+                <div class="mb-3">
+
+                    <label>Your Name</label>
+
+                    <input type="text"
+                           name="requester_name"
+                           class="form-control"
+                           required>
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label>Item You Want To Exchange</label>
+
+                    <input type="text"
+                           name="offered_item"
+                           class="form-control"
+                           placeholder="Example: Samsung Phone"
+                           required>
+
+                </div>
+
+                <button type="submit"
+                        class="btn btn-warning">
+
+                    Send Barter Request
+
+                </button>
+
+                <a href="/item/{{ item.id }}"
+                   class="btn btn-secondary">
+
+                    Back
+
+                </a>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

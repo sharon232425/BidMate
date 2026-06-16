@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Upload Item</h2>
+
+<form method="POST" enctype="multipart/form-data">
+
+```
+<div class="mb-3">
+    <label>Item Name</label>
+    <input type="text"
+           name="title"
+           class="form-control"
+           required>
+</div>
+
+<div class="mb-3">
+    <label>Description</label>
+    <textarea name="description"
+              class="form-control"
+              required></textarea>
+</div>
+
+<div class="mb-3">
+    <label>Starting Price</label>
+    <input type="number"
+           name="price"
+           class="form-control"
+           required>
+</div>
+
+<div class="mb-3">
+    <label>Category</label>
+    <select name="category"
+            class="form-control">
+
+        <option>Books</option>
+        <option>Hostel Items</option>
+        <option>Electronics</option>
+        <option>Others</option>
+
+    </select>
+</div>
+
+<div class="mb-3">
+    <label>Auction End Date</label>
+    <input type="date"
+           name="auction_end"
+           class="form-control"
+           required>
+</div>
+
+<div class="mb-3">
+    <label>Item Image</label>
+    <input type="file"
+           name="image"
+           class="form-control">
+</div>
+
+<button type="submit"
+        class="btn btn-primary">
+    Upload Item
+</button>
+```
+
+</form>
+
+{% endblock %}

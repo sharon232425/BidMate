@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>My Items</h2>
+
+<div class="row">
+
+{% for item in items %}
+
+<div class="col-md-4 mb-4">
+
+```
+<div class="card h-100">
+
+    {% if item.image %}
+    <img src="{{ url_for('static', filename='uploads/' + item.image) }}"
+         class="card-img-top"
+         height="200"
+         style="object-fit: cover;">
+    {% endif %}
+
+    <div class="card-body">
+
+        <h5>{{ item.title }}</h5>
+
+        <p>{{ item.description }}</p>
+
+        <p><strong>₹{{ item.price }}</strong></p>
+
+        <p>{{ item.category }}</p>
+
+        <a href="/item/{{ item.id }}"
+           class="btn btn-primary">
+           View Bids
+        </a>
+
+        <a href="/edit-item/{{ item.id }}"
+           class="btn btn-warning">
+           Edit
+        </a>
+
+        <a href="/delete-item/{{ item.id }}"
+           class="btn btn-danger">
+           Delete Item
+        </a>
+
+    </div>
+
+</div>
+```
+
+</div>
+
+{% endfor %}
+
+</div>
+
+{% endblock %}
