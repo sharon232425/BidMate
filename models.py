@@ -57,34 +57,15 @@ class Bid(db.Model):
         db.ForeignKey('item.id')
     )
 class BarterRequest(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
 
+    requester_name = db.Column(db.String(100), nullable=False)
+    offered_item = db.Column(db.String(200), nullable=False)
 
- id = db.Column(db.Integer, primary_key=True)
+    item_id = db.Column(db.Integer, db.ForeignKey('item.id'))
+    requester_user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
-requester_name = db.Column(
-    db.String(100),
-    nullable=False
-)
-
-offered_item = db.Column(
-    db.String(200),
-    nullable=False
-)
-
-item_id = db.Column(
-    db.Integer,
-    db.ForeignKey('item.id')
-)
-
-requester_user_id = db.Column(
-    db.Integer,
-    db.ForeignKey('user.id')
-)
-
-status = db.Column(
-    db.String(50),
-    default="Pending"
-)
+    status = db.Column(db.String(50), default="Pending")
 class Message(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
