@@ -294,23 +294,24 @@ def admin_delete_user(user_id):
     db.session.commit()
 
     return redirect(url_for('admin'))
-
 @app.route('/barter/<int:item_id>', methods=['GET', 'POST'])
 def barter(item_id):
-    if 'user_id' not in session:
+
+    user_id = session.get('user_id')
+    if not user_id:
         return redirect(url_for('login'))
 
     item = Item.query.get_or_404(item_id)
 
     if request.method == 'POST':
-        requester_name = request.form['requester_name']
-        offered_item = request.form['offered_item']
+        requester_name = request.form.get('requester_name')
+        offered_item = request.form.get('offered_item')
 
         new_request = BarterRequest(
             requester_name=requester_name,
             offered_item=offered_item,
             item_id=item.id,
-            requester_user_id=session['user_id']
+            requester_user_id=user_id
         )
 
         db.session.add(new_request)
@@ -320,21 +321,28 @@ def barter(item_id):
 
     return render_template('barter.html', item=item)
 
+
+# ----------------------------
+# MY BARTER REQUESTS
+# ----------------------------
 @app.route('/my-barter-requests')
 def my_barter_requests():
 
-    if 'user_id' not in session:
+    user_id = session.get('user_id')
+    if not user_id:
         return redirect(url_for('login'))
 
-    my_items = Item.query.filter_by(
-        user_id=session['user_id']
-    ).all()
+    my_items = Item.query.filter_by(user_id=user_id).all()
 
     item_ids = [item.id for item in my_items]
 
-    requests = BarterRequest.query.filter(
-        BarterRequest.item_id.in_(item_ids)
-    ).all()
+    # ✅ SAFE FIX (prevents crash)
+    if item_ids:
+        requests = BarterRequest.query.filter(
+            BarterRequest.item_id.in_(item_ids)
+        ).all()
+    else:
+        requests = []
 
     return render_template(
         'my_barter_requests.html',
@@ -342,14 +350,18 @@ def my_barter_requests():
     )
 
 
+# ----------------------------
+# MY BARTER OFFERS
+# ----------------------------
 @app.route('/my-barter-offers')
 def my_barter_offers():
 
-    if 'user_id' not in session:
+    user_id = session.get('user_id')
+    if not user_id:
         return redirect(url_for('login'))
 
     offers = BarterRequest.query.filter_by(
-        requester_user_id=session['user_id']
+        requester_user_id=user_id
     ).all()
 
     return render_template(
@@ -358,25 +370,29 @@ def my_barter_offers():
     )
 
 
+# ----------------------------
+# ACCEPT BARTER
+# ----------------------------
 @app.route('/accept-barter/<int:request_id>')
 def accept_barter(request_id):
 
     barter = BarterRequest.query.get_or_404(request_id)
 
     barter.status = "Accepted"
-
     db.session.commit()
 
     return redirect(url_for('my_barter_requests'))
 
 
+# ----------------------------
+# REJECT BARTER
+# ----------------------------
 @app.route('/reject-barter/<int:request_id>')
 def reject_barter(request_id):
 
     barter = BarterRequest.query.get_or_404(request_id)
 
     barter.status = "Rejected"
-
     db.session.commit()
 
     return redirect(url_for('my_barter_requests'))
