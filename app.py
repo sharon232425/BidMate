@@ -298,21 +298,24 @@ def admin_delete_user(user_id):
 def barter(item_id):
 
     user_id = session.get('user_id')
+
     if not user_id:
         return redirect(url_for('login'))
 
     item = Item.query.get_or_404(item_id)
 
     if request.method == 'POST':
+
         requester_name = request.form.get('requester_name')
         offered_item = request.form.get('offered_item')
 
-        new_request = BarterRequest(
-            requester_name=requester_name,
-            offered_item=offered_item,
-            item_id=item.id,
-            requester_user_id=user_id
-        )
+        new_request = BarterRequest()
+
+        new_request.requester_name = requester_name
+        new_request.offered_item = offered_item
+        new_request.item_id = item.id
+        new_request.requester_user_id = user_id
+        new_request.status = "Pending"
 
         db.session.add(new_request)
         db.session.commit()
@@ -320,8 +323,6 @@ def barter(item_id):
         return redirect(url_for('my_barter_offers'))
 
     return render_template('barter.html', item=item)
-
-
 # ----------------------------
 # MY BARTER REQUESTS
 # ----------------------------
@@ -429,7 +430,6 @@ def chat(item_id):
         messages=messages
     )
 with app.app_context():
-    db.drop_all()
     db.create_all()
 if __name__ == '__main__':
     import os
