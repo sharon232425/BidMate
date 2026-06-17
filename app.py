@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, session, redirect, url_for
+from flask import Flask, render_template, request, session, redirect, url_for, flash
 from models import db, User, Item, Bid, BarterRequest, Message
 from werkzeug.utils import secure_filename
 from sqlalchemy import or_, and_
@@ -154,7 +154,6 @@ def upload_item():
         return redirect(url_for('my_items'))
 
     return render_template('upload_item.html')
-
 @app.route('/item/<int:item_id>', methods=['GET', 'POST'])
 def item_details(item_id):
 
@@ -163,7 +162,7 @@ def item_details(item_id):
     if request.method == 'POST':
 
         bidder_name = request.form['bidder_name']
-        amount = request.form['amount']
+        amount = int(request.form['amount'])
 
         highest_bid = Bid.query.filter_by(
             item_id=item.id
@@ -171,17 +170,44 @@ def item_details(item_id):
             Bid.amount.desc()
         ).first()
 
-        if highest_bid and int(amount) <= highest_bid.amount:
-            return "Bid must be higher than the current highest bid!"
+        # Check against highest bid
+        if highest_bid:
+            if amount <= highest_bid.amount:
+                flash("Bid must be higher than the current highest bid!")
+                return redirect(
+                    url_for(
+                        'item_details',
+                        item_id=item.id
+                    )
+                )
+
+        # If no bids exist, compare with starting price
+        else:
+            if amount <= item.price:
+                flash("Bid must be greater than the starting price!")
+                return redirect(
+                    url_for(
+                        'item_details',
+                        item_id=item.id
+                    )
+                )
 
         new_bid = Bid(
             bidder_name=bidder_name,
-            amount=int(amount),
+            amount=amount,
             item_id=item.id
         )
 
         db.session.add(new_bid)
         db.session.commit()
+
+        flash("Bid placed successfully!")
+        return redirect(
+            url_for(
+                'item_details',
+                item_id=item.id
+            )
+        )
 
     bids = Bid.query.filter_by(
         item_id=item.id
@@ -197,8 +223,6 @@ def item_details(item_id):
         bids=bids,
         seller=seller
     )
-
-
 @app.route('/my-items')
 def my_items():
 

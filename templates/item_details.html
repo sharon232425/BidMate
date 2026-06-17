@@ -4,120 +4,128 @@
 
 <div class="card shadow-lg">
 
-```
-{% if item.image %}
-<img src="{{ url_for('static', filename='uploads/' + item.image) }}"
-     class="card-img-top"
-     style="max-height:400px; object-fit:cover;">
-{% endif %}
-
-<div class="card-body">
-
-    <h2>{{ item.title }}</h2>
-
-    <p>{{ item.description }}</p>
-
-    <p><strong>Category:</strong> {{ item.category }}</p>
-
-    <p><strong>Starting Price:</strong> ₹{{ item.price }}</p>
-
-    <p>
-        <strong>Auction Ends:</strong>
-        {{ item.auction_end }}
-    </p>
-
-    <div class="alert alert-warning">
-        ⏳ Time Remaining:
-        <span id="countdown"></span>
-    </div>
-
-    <hr>
-
-    <h4>Seller Details</h4>
-
-    <div class="alert alert-info">
-        <strong>Name:</strong> {{ seller.name }} <br>
-        <strong>Email:</strong> {{ seller.email }}
-    </div>
-
-    <a href="mailto:{{ seller.email }}"
-       class="btn btn-primary mb-3">
-        Contact Seller
-    </a>
-
-    <a href="{{ url_for('chat', item_id=item.id) }}"
-       class="btn btn-success mb-3">
-        💬 Chat with Seller
-    </a>
-
-    <a href="{{ url_for('barter', item_id=item.id) }}"
-       class="btn btn-warning mb-3">
-        🔄 Offer Exchange
-    </a>
-
-    <hr>
-
-    <h4>Highest Bid</h4>
-
-    {% if bids %}
-
-    <div class="alert alert-success">
-        <strong>{{ bids[0].bidder_name }}</strong>
-        is leading with ₹{{ bids[0].amount }}
-    </div>
-
-    {% else %}
-
-    <div class="alert alert-warning">
-        No bids yet.
-    </div>
-
+    {% if item.image %}
+    <img src="{{ url_for('static', filename='uploads/' + item.image) }}"
+         class="card-img-top"
+         style="max-height:400px; object-fit:cover;">
     {% endif %}
 
-    <hr>
+    <div class="card-body">
 
-    <h4>Place Your Bid</h4>
+        <h2>{{ item.title }}</h2>
 
-    <form method="POST">
+        <p>{{ item.description }}</p>
 
-        <div class="mb-3">
-            <label>Your Name</label>
-            <input type="text"
-                   name="bidder_name"
-                   class="form-control"
-                   required>
+        <p><strong>Category:</strong> {{ item.category }}</p>
+
+        <p><strong>Starting Price:</strong> ₹{{ item.price }}</p>
+
+        <p>
+            <strong>Auction Ends:</strong>
+            {{ item.auction_end }}
+        </p>
+
+        <div class="alert alert-warning">
+            ⏳ Time Remaining:
+            <span id="countdown"></span>
         </div>
 
-        <div class="mb-3">
-            <label>Bid Amount</label>
-            <input type="number"
-                   name="amount"
-                   class="form-control"
-                   required>
+        <hr>
+
+        <h4>Seller Details</h4>
+
+        <div class="alert alert-info">
+            <strong>Name:</strong> {{ seller.name }} <br>
+            <strong>Email:</strong> {{ seller.email }}
         </div>
 
-        <button type="submit"
-                class="btn btn-success">
-            Place Bid
-        </button>
+        <a href="mailto:{{ seller.email }}"
+           class="btn btn-primary mb-3">
+            Contact Seller
+        </a>
 
-    </form>
+        <a href="{{ url_for('chat', item_id=item.id) }}"
+           class="btn btn-success mb-3">
+            💬 Chat with Seller
+        </a>
 
-    <hr>
+        <a href="{{ url_for('barter', item_id=item.id) }}"
+           class="btn btn-warning mb-3">
+            🔄 Offer Exchange
+        </a>
 
-    <h4>Bid History</h4>
+        <hr>
 
-    {% for bid in bids %}
+        <h4>Highest Bid</h4>
 
-    <div class="alert alert-light">
-        <strong>{{ bid.bidder_name }}</strong>
-        bid ₹{{ bid.amount }}
+        {% if bids %}
+
+        <div class="alert alert-success">
+            <strong>{{ bids[0].bidder_name }}</strong>
+            is leading with ₹{{ bids[0].amount }}
+        </div>
+
+        {% else %}
+
+        <div class="alert alert-warning">
+            No bids yet.
+        </div>
+
+        {% endif %}
+
+        <hr>
+
+        <h4>Place Your Bid</h4>
+
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-danger">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <form method="POST">
+
+            <div class="mb-3">
+                <label>Your Name</label>
+                <input type="text"
+                       name="bidder_name"
+                       class="form-control"
+                       required>
+            </div>
+
+            <div class="mb-3">
+                <label>Bid Amount</label>
+                <input type="number"
+                       name="amount"
+                       class="form-control"
+                       required>
+            </div>
+
+            <button type="submit"
+                    class="btn btn-success">
+                Place Bid
+            </button>
+
+        </form>
+
+        <hr>
+
+        <h4>Bid History</h4>
+
+        {% for bid in bids %}
+
+        <div class="alert alert-light">
+            <strong>{{ bid.bidder_name }}</strong>
+            bid ₹{{ bid.amount }}
+        </div>
+
+        {% endfor %}
+
     </div>
-
-    {% endfor %}
-
-</div>
-```
 
 </div>
 
