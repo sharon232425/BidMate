@@ -6,11 +6,24 @@ import os
 
 app = Flask(__name__)
 
-# ✅ SECRET KEY (ONLY ONE WAY)
-app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY", "bidmate_secret_key")
+app.config['SECRET_KEY'] = os.environ.get(
+    "SECRET_KEY",
+    "bidmate_secret_key"
+)
 
-# DB CONFIG
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///bidmate.db'
+database_url = os.environ.get("DATABASE_URL")
+
+if database_url:
+    database_url = database_url.replace(
+        "postgres://",
+        "postgresql://",
+        1
+    )
+
+app.config['SQLALCHEMY_DATABASE_URI'] = (
+    database_url or 'sqlite:///bidmate.db'
+)
+
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # UPLOAD FOLDER
