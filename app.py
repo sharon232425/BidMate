@@ -282,12 +282,16 @@ def delete_item(item_id):
     if item.user_id != session['user_id']:
         return "Unauthorized"
 
+    Bid.query.filter_by(item_id=item.id).delete()
+
+    BarterRequest.query.filter_by(item_id=item.id).delete()
+
+    Message.query.filter_by(item_id=item.id).delete()
+
     db.session.delete(item)
     db.session.commit()
 
     return redirect(url_for('my_items'))
-
-
 @app.route('/admin')
 def admin():
 
