@@ -4,13 +4,25 @@ from werkzeug.utils import secure_filename
 from sqlalchemy import or_, and_
 import os
 
+import cloudinary
+import cloudinary.uploader
+
 app = Flask(__name__)
 
+# CLOUDINARY CONFIG
+cloudinary.config(
+    cloud_name=os.environ.get("CLOUDINARY_CLOUD_NAME"),
+    api_key=os.environ.get("CLOUDINARY_API_KEY"),
+    api_secret=os.environ.get("CLOUDINARY_API_SECRET")
+)
+
+# SECRET KEY
 app.config['SECRET_KEY'] = os.environ.get(
     "SECRET_KEY",
     "bidmate_secret_key"
 )
 
+# DATABASE
 database_url = os.environ.get("DATABASE_URL")
 
 if database_url:
@@ -26,18 +38,10 @@ app.config['SQLALCHEMY_DATABASE_URI'] = (
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-# UPLOAD FOLDER
-app.config['UPLOAD_FOLDER'] = os.path.join(
-    app.root_path,
-    'static',
-    'uploads'
-)
-
 db.init_app(app)
 
 with app.app_context():
     db.create_all()
-
 
 @app.route('/')
 def home():
@@ -119,7 +123,6 @@ def dashboard():
         'dashboard.html',
         user_name=session['user_name']
     )
-
 @app.route('/upload-item', methods=['GET', 'POST'])
 def upload_item():
 
@@ -136,27 +139,22 @@ def upload_item():
 
         image_file = request.files['image']
 
-        filename = ""
+        image_url = ""
 
         if image_file and image_file.filename:
 
-            filename = secure_filename(
-                image_file.filename
+            result = cloudinary.uploader.upload(
+                image_file
             )
 
-            image_path = os.path.join(
-                app.config['UPLOAD_FOLDER'],
-                filename
-            )
-
-            image_file.save(image_path)
+            image_url = result['secure_url']
 
         item = Item(
             title=title,
             description=description,
             price=price,
             category=category,
-            image=filename,
+            image=image_url,
             auction_end=auction_end,
             user_id=session['user_id']
         )
