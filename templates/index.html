@@ -48,7 +48,7 @@
 <div class="card h-100 shadow-lg border-0">
 
     {% if item.image %}
-    <img src="{{ url_for('static', filename='uploads/' + item.image) }}"
+    <img src="{{ item.image }}"
          class="card-img-top"
          height="250"
          style="object-fit:cover;">
