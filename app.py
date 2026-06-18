@@ -4,18 +4,19 @@ from werkzeug.utils import secure_filename
 from sqlalchemy import or_, and_
 import os
 
+import os
+
+from flask import Flask
 import cloudinary
 import cloudinary.uploader
 
 app = Flask(__name__)
 
-# CLOUDINARY CONFIG
 cloudinary.config(
     cloud_name=os.environ.get("CLOUDINARY_CLOUD_NAME"),
     api_key=os.environ.get("CLOUDINARY_API_KEY"),
     api_secret=os.environ.get("CLOUDINARY_API_SECRET")
 )
-
 # SECRET KEY
 app.config['SECRET_KEY'] = os.environ.get(
     "SECRET_KEY",
