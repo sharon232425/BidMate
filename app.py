@@ -301,9 +301,8 @@ def admin():
 
     user = User.query.get(session['user_id'])
 
-    if user.email != "admin@bidmate.com":
-        return "Access Denied"
-
+    if user.email != "sharon@gmail.com":
+            return "Access Denied"
     users = User.query.all()
     items = Item.query.all()
     bids = Bid.query.all()
